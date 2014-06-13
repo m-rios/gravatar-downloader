@@ -10,16 +10,33 @@ def get_url(email, size):
 
 ##main:
 
-if len(sys.argv) <3 or len(sys.argv) >3:
-	print 'wrong parameters'
+if len(sys.argv) > 3 or len(sys.argv) < 2:
+    print 'wrong parameters, type -h for help'
+    quit()
+
+if sys.argv[1] == '-h':
+    print 'parameters: mail [size]'
+    quit()
 
 email = sys.argv[1]
-size = int(sys.argv[2])
+if len(sys.argv) == 3:
+    try:
+        size = int(sys.argv[2])
+    except ValueError, e:
+        print 'size must be a number'
+        quit()
+else:
+    size = 200
 
 url = get_url(email, size)
 
 file_name = url.split('/')[-1]
-u = urllib2.urlopen(url)
+try:
+    u = urllib2.urlopen(url)
+except urllib2.HTTPError, e:
+    print ('email not valid: %s' %e)
+    quit() 
+
 f = open(file_name, 'wb')
 meta = u.info()
 file_size = int(meta.getheaders("Content-Length")[0])
