@@ -2,11 +2,9 @@ import urllib, hashlib, urllib2, sys
 
 def get_url(email, size): 
 	# construct the url
-	default = "http://www.example.com/default.jpg"
-	gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
-	gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
-
-	return gravatar_url
+    gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
+    gravatar_url += urllib.urlencode({'s':str(size)})
+    return gravatar_url + ".png"
 
 ##main:
 
@@ -31,6 +29,8 @@ else:
 url = get_url(email, size)
 
 file_name = url.split('/')[-1]
+print file_name
+
 try:
     u = urllib2.urlopen(url)
 except urllib2.HTTPError, e:
